@@ -3,40 +3,244 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Todo Uygulaması</title>
+  <title>Yapılacaklar</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --primary-light: #ede9fe;
+      --danger: #ef4444;
+      --danger-light: #fee2e2;
+      --text: #374151;
+      --muted: #9ca3af;
+      --border: #e5e7eb;
+      --bg: #f4f6fb;
+    }
 
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f0f2f5;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
       min-height: 100vh;
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       justify-content: center;
-      padding: 40px 16px;
+      padding: 24px 16px;
     }
+
+    /* ── AUTH SCREENS ── */
+    .auth-wrap {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .auth-logo {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .auth-logo .icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 64px; height: 64px;
+      background: linear-gradient(135deg, var(--primary), #8b5cf6);
+      border-radius: 18px;
+      font-size: 28px;
+      margin-bottom: 12px;
+      box-shadow: 0 8px 24px rgba(99,102,241,0.35);
+    }
+
+    .auth-logo h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .auth-logo p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .auth-card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.09);
+      padding: 32px;
+    }
+
+    .auth-tabs {
+      display: flex;
+      background: var(--bg);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 28px;
+      gap: 4px;
+    }
+
+    .auth-tab {
+      flex: 1;
+      border: none;
+      background: none;
+      padding: 9px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+
+    .auth-tab.active {
+      background: #fff;
+      color: var(--primary);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .auth-form { display: flex; flex-direction: column; gap: 16px; }
+    .auth-form.hidden { display: none; }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .field input {
+      width: 100%;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      color: var(--text);
+    }
+
+    .field input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary), #8b5cf6);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 13px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      box-shadow: 0 4px 14px rgba(99,102,241,0.35);
+      margin-top: 4px;
+    }
+
+    .btn-primary:hover  { opacity: 0.92; }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+    .auth-alert {
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 13px;
+      line-height: 1.5;
+      display: none;
+    }
+
+    .auth-alert.error   { background: var(--danger-light); color: #b91c1c; }
+    .auth-alert.success { background: #d1fae5; color: #065f46; }
+    .auth-alert.show    { display: block; }
+
+    /* ── SUCCESS SCREEN ── */
+    .success-screen {
+      display: none;
+      text-align: center;
+    }
+
+    .success-screen.show { display: block; }
+
+    .success-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .success-screen h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .success-screen p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .success-screen .email-box {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    /* ── TODO APP ── */
+    .app-wrap {
+      display: none;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .app-wrap.show { display: block; }
 
     .app {
       background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-      width: 100%;
-      max-width: 480px;
+      border-radius: 20px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.09);
       overflow: hidden;
     }
 
-    .header {
-      background: linear-gradient(135deg, #6366f1, #8b5cf6);
-      padding: 28px 24px 20px;
+    .app-header {
+      background: linear-gradient(135deg, var(--primary), #8b5cf6);
+      padding: 24px 24px 20px;
       color: #fff;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
     }
 
-    .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
-    .header .stats { font-size: 13px; opacity: 0.85; }
+    .app-header-left h1 { font-size: 20px; font-weight: 700; margin-bottom: 3px; }
+    .app-header-left .stats { font-size: 12px; opacity: 0.85; }
+    .app-header-left .user-email { font-size: 11px; opacity: 0.7; margin-top: 2px; }
+
+    .btn-logout {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: #fff;
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+      margin-top: 2px;
+    }
+
+    .btn-logout:hover { background: rgba(255,255,255,0.32); }
 
     .input-area {
-      padding: 20px 24px;
+      padding: 18px 20px;
       border-bottom: 1px solid #f0f0f0;
       display: flex;
       gap: 10px;
@@ -44,69 +248,81 @@
 
     .input-area input {
       flex: 1;
-      border: 1.5px solid #e5e7eb;
-      border-radius: 8px;
-      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      padding: 10px 13px;
       font-size: 14px;
       outline: none;
       transition: border-color 0.2s;
+      color: var(--text);
     }
 
-    .input-area input:focus { border-color: #6366f1; }
+    .input-area input:focus { border-color: var(--primary); }
 
-    .input-area button {
-      background: #6366f1;
+    .btn-add {
+      background: var(--primary);
       color: #fff;
       border: none;
-      border-radius: 8px;
-      padding: 10px 18px;
+      border-radius: 9px;
+      padding: 10px 16px;
       font-size: 20px;
+      line-height: 1;
       cursor: pointer;
       transition: background 0.2s;
-      line-height: 1;
+      flex-shrink: 0;
     }
 
-    .input-area button:hover { background: #4f46e5; }
-    .input-area button:disabled { background: #a5b4fc; cursor: not-allowed; }
+    .btn-add:hover    { background: var(--primary-dark); }
+    .btn-add:disabled { background: #a5b4fc; cursor: not-allowed; }
 
     .filters {
       display: flex;
-      padding: 12px 24px;
+      padding: 10px 20px;
       border-bottom: 1px solid #f0f0f0;
+      gap: 0;
     }
 
     .filter-btn {
       background: none;
-      border: 1.5px solid #e5e7eb;
-      padding: 6px 16px;
-      font-size: 13px;
+      border: 1.5px solid var(--border);
+      padding: 5px 14px;
+      font-size: 12px;
       cursor: pointer;
-      color: #6b7280;
+      color: var(--muted);
       transition: all 0.2s;
     }
 
-    .filter-btn:first-child { border-radius: 8px 0 0 8px; }
-    .filter-btn:last-child  { border-radius: 0 8px 8px 0; border-left: none; }
+    .filter-btn:first-child { border-radius: 7px 0 0 7px; }
+    .filter-btn:last-child  { border-radius: 0 7px 7px 0; border-left: none; }
     .filter-btn:not(:first-child):not(:last-child) { border-left: none; }
-    .filter-btn.active { background: #6366f1; border-color: #6366f1; color: #fff; }
+    .filter-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+    .error-bar {
+      background: var(--danger-light);
+      color: #b91c1c;
+      font-size: 13px;
+      padding: 10px 20px;
+      display: none;
+    }
 
     .todo-list { list-style: none; min-height: 60px; }
 
     .todo-item {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 14px 24px;
+      gap: 11px;
+      padding: 13px 20px;
       border-bottom: 1px solid #f5f5f7;
       transition: background 0.15s;
     }
 
-    .todo-item:hover { background: #fafafa; }
+    .todo-item:last-child  { border-bottom: none; }
+    .todo-item:hover       { background: #fafafa; }
     .todo-item.done .todo-text { text-decoration: line-through; color: #b0b7c3; }
 
     .todo-check {
       width: 20px; height: 20px;
-      border: 2px solid #d1d5db;
+      border: 2px solid var(--border);
       border-radius: 50%;
       cursor: pointer;
       display: flex;
@@ -116,240 +332,437 @@
       transition: all 0.2s;
     }
 
-    .todo-item.done .todo-check { background: #6366f1; border-color: #6366f1; }
-    .todo-check::after {
-      content: '';
-      width: 6px; height: 6px;
-      background: #fff;
-      border-radius: 50%;
-      display: none;
-    }
+    .todo-item.done .todo-check { background: var(--primary); border-color: var(--primary); }
+    .todo-check::after { content: ''; width: 6px; height: 6px; background: #fff; border-radius: 50%; display: none; }
     .todo-item.done .todo-check::after { display: block; }
 
-    .todo-text { flex: 1; font-size: 14px; color: #374151; word-break: break-word; }
+    .todo-text { flex: 1; font-size: 14px; color: var(--text); word-break: break-word; }
     .todo-text[contenteditable="true"] {
-      outline: none;
-      background: #f3f4f6;
-      border-radius: 4px;
-      padding: 2px 6px;
+      outline: none; background: #f3f4f6; border-radius: 4px; padding: 2px 6px;
     }
 
-    .todo-actions { display: flex; gap: 4px; opacity: 0; transition: opacity 0.15s; }
+    .todo-actions { display: flex; gap: 3px; opacity: 0; transition: opacity 0.15s; }
     .todo-item:hover .todo-actions { opacity: 1; }
 
     .btn-icon {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px 6px;
-      border-radius: 6px;
-      font-size: 14px;
-      transition: background 0.15s;
+      background: none; border: none; cursor: pointer;
+      padding: 4px 6px; border-radius: 6px; font-size: 13px; transition: background 0.15s;
     }
 
-    .btn-edit:hover   { background: #ede9fe; }
-    .btn-delete:hover { background: #fee2e2; }
+    .btn-icon.edit:hover   { background: var(--primary-light); }
+    .btn-icon.del:hover    { background: var(--danger-light); }
 
-    .empty { text-align: center; color: #b0b7c3; padding: 40px 24px; font-size: 14px; }
-
-    .loading {
-      text-align: center;
-      padding: 32px;
-      color: #9ca3af;
-      font-size: 14px;
+    .empty {
+      text-align: center; color: var(--muted);
+      padding: 40px 20px; font-size: 14px;
     }
 
-    .error-bar {
-      background: #fee2e2;
-      color: #b91c1c;
-      font-size: 13px;
-      padding: 10px 24px;
-      display: none;
+    .loading-spinner {
+      text-align: center; padding: 32px; color: var(--muted); font-size: 14px;
     }
 
-    .footer {
+    .app-footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 24px;
+      padding: 11px 20px;
       border-top: 1px solid #f0f0f0;
       font-size: 12px;
-      color: #9ca3af;
+      color: var(--muted);
     }
 
-    .btn-clear {
-      background: none;
-      border: none;
-      color: #ef4444;
-      font-size: 12px;
-      cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 6px;
-      transition: background 0.15s;
+    .btn-clear-done {
+      background: none; border: none; color: var(--danger);
+      font-size: 12px; cursor: pointer; padding: 3px 8px;
+      border-radius: 6px; transition: background 0.15s;
     }
+    .btn-clear-done:hover { background: var(--danger-light); }
 
-    .btn-clear:hover { background: #fee2e2; }
-
-    .spinner {
-      display: inline-block;
-      width: 14px; height: 14px;
-      border: 2px solid #fff;
-      border-top-color: transparent;
-      border-radius: 50%;
-      animation: spin 0.6s linear infinite;
-      vertical-align: middle;
+    /* spinner */
+    .spin {
+      display: inline-block; width: 14px; height: 14px;
+      border: 2px solid #fff; border-top-color: transparent;
+      border-radius: 50%; animation: rot 0.6s linear infinite; vertical-align: middle;
     }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes rot { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
-<div class="app">
-  <div class="header">
+
+<!-- ── AUTH WRAPPER ── -->
+<div class="auth-wrap" id="authWrap">
+  <div class="auth-logo">
+    <div class="icon">✅</div>
     <h1>Yapılacaklar</h1>
-    <div class="stats" id="stats">Yükleniyor...</div>
+    <p>Görevlerini yönet, hedeflerine ulaş</p>
   </div>
 
-  <div class="input-area">
-    <input type="text" id="newTodo" placeholder="Yeni görev ekle..." maxlength="200">
-    <button id="addBtn" title="Ekle">+</button>
+  <div class="auth-card">
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin"  onclick="switchTab('login')">Giriş Yap</button>
+      <button class="auth-tab"        id="tabSignup" onclick="switchTab('signup')">Kayıt Ol</button>
+    </div>
+
+    <div id="alertBox" class="auth-alert"></div>
+
+    <!-- Login form -->
+    <form class="auth-form" id="loginForm" onsubmit="handleLogin(event)">
+      <div class="field">
+        <label>E-posta</label>
+        <input type="email" id="loginEmail" placeholder="ornek@email.com" required autocomplete="email">
+      </div>
+      <div class="field">
+        <label>Şifre</label>
+        <input type="password" id="loginPass" placeholder="••••••••" required autocomplete="current-password" minlength="6">
+      </div>
+      <button type="submit" class="btn-primary" id="loginBtn">Giriş Yap</button>
+    </form>
+
+    <!-- Signup form -->
+    <form class="auth-form hidden" id="signupForm" onsubmit="handleSignup(event)">
+      <div class="field">
+        <label>E-posta</label>
+        <input type="email" id="signupEmail" placeholder="ornek@email.com" required autocomplete="email">
+      </div>
+      <div class="field">
+        <label>Şifre <span style="font-weight:400;color:var(--muted)">(en az 6 karakter)</span></label>
+        <input type="password" id="signupPass" placeholder="••••••••" required autocomplete="new-password" minlength="6">
+      </div>
+      <button type="submit" class="btn-primary" id="signupBtn">Hesap Oluştur</button>
+    </form>
   </div>
 
-  <div class="filters">
-    <button class="filter-btn active" data-filter="all">Tümü</button>
-    <button class="filter-btn" data-filter="active">Aktif</button>
-    <button class="filter-btn" data-filter="done">Tamamlanan</button>
+  <!-- Email confirmation success -->
+  <div class="auth-card" id="successScreen" style="display:none;text-align:center;margin-top:16px">
+    <span class="success-icon">📧</span>
+    <h2>E-postanızı Kontrol Edin!</h2>
+    <p>Doğrulama bağlantısı gönderildi. E-postanızdaki bağlantıya tıklayarak hesabınızı etkinleştirin.</p>
+    <div class="email-box" id="sentEmail"></div>
+    <p style="font-size:13px;color:var(--muted)">Gelen kutunuzda görmüyorsanız spam klasörünü kontrol edin.</p>
   </div>
+</div>
 
-  <div class="error-bar" id="errorBar"></div>
+<!-- ── TODO APP ── -->
+<div class="app-wrap" id="appWrap">
+  <div class="app">
+    <div class="app-header">
+      <div class="app-header-left">
+        <h1>Yapılacaklar</h1>
+        <div class="stats" id="stats">0 görev</div>
+        <div class="user-email" id="userEmail"></div>
+      </div>
+      <button class="btn-logout" onclick="handleLogout()">Çıkış</button>
+    </div>
 
-  <ul class="todo-list" id="todoList">
-    <div class="loading"><span class="spinner"></span> Yükleniyor...</div>
-  </ul>
+    <div class="input-area">
+      <input type="text" id="newTodo" placeholder="Yeni görev ekle..." maxlength="200">
+      <button class="btn-add" id="addBtn" onclick="addTodo()">+</button>
+    </div>
 
-  <div class="footer">
-    <span id="remaining"></span>
-    <button class="btn-clear" id="clearDone">Tamamlananları sil</button>
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">Tümü</button>
+      <button class="filter-btn" data-filter="active">Aktif</button>
+      <button class="filter-btn" data-filter="done">Tamamlanan</button>
+    </div>
+
+    <div class="error-bar" id="errorBar"></div>
+
+    <ul class="todo-list" id="todoList">
+      <div class="loading-spinner"><span class="spin"></span> Yükleniyor...</div>
+    </ul>
+
+    <div class="app-footer">
+      <span id="remaining"></span>
+      <button class="btn-clear-done" onclick="clearDone()">Tamamlananları sil</button>
+    </div>
   </div>
 </div>
 
 <script>
+  /* ── CONFIG ── */
   const SUPABASE_URL = 'https://gmwvxstsfptueesrnchr.supabase.co';
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdtd3Z4c3RzZnB0dWVlc3JuY2hyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3OTU2NzAsImV4cCI6MjA5MjM3MTY3MH0.T357Gh9bRtPvu9EzmWcK4ydwc8Cnyw9BIKYj6hDmd7Q';
-  const BASE = `${SUPABASE_URL}/rest/v1/todos`;
-  const HEADERS = {
-    'apikey': SUPABASE_KEY,
-    'Authorization': `Bearer ${SUPABASE_KEY}`,
-    'Content-Type': 'application/json',
-    'Prefer': 'return=representation'
-  };
+  const ANON_KEY     = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdtd3Z4c3RzZnB0dWVlc3JuY2hyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3OTU2NzAsImV4cCI6MjA5MjM3MTY3MH0.T357Gh9bRtPvu9EzmWcK4ydwc8Cnyw9BIKYj6hDmd7Q';
 
-  let todos = [];
-  let filter = 'all';
+  let session = null;
+  let todos   = [];
+  let filter  = 'all';
   let editingId = null;
 
-  async function api(path, options = {}) {
-    const res = await fetch(BASE + path, { headers: HEADERS, ...options });
-    if (!res.ok) {
-      const err = await res.text();
-      throw new Error(err || res.statusText);
-    }
+  /* ── AUTH API ── */
+  async function authFetch(path, opts = {}) {
+    const res = await fetch(`${SUPABASE_URL}/auth/v1${path}`, {
+      headers: {
+        'apikey': ANON_KEY,
+        'Content-Type': 'application/json',
+        ...(session ? { 'Authorization': `Bearer ${session.access_token}` } : {})
+      },
+      ...opts
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error_description || data.msg || data.message || 'Bir hata oluştu');
+    return data;
+  }
+
+  async function todosFetch(path, opts = {}) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/todos${path}`, {
+      headers: {
+        'apikey': ANON_KEY,
+        'Authorization': `Bearer ${session.access_token}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+      },
+      ...opts
+    });
     const text = await res.text();
+    if (!res.ok) throw new Error(text || res.statusText);
     return text ? JSON.parse(text) : null;
   }
 
-  async function loadTodos() {
+  /* ── SESSION ── */
+  function saveSession(s) {
+    session = s;
+    if (s) localStorage.setItem('sb_session', JSON.stringify(s));
+    else    localStorage.removeItem('sb_session');
+  }
+
+  async function refreshSession(refreshToken) {
     try {
-      todos = await api('?order=created_at.desc');
-      render();
-    } catch (e) {
-      showError('Görevler yüklenemedi: ' + e.message);
+      const data = await authFetch('/token?grant_type=refresh_token', {
+        method: 'POST',
+        body: JSON.stringify({ refresh_token: refreshToken })
+      });
+      saveSession(data);
+      return true;
+    } catch { return false; }
+  }
+
+  /* ── STARTUP: handle confirm redirect & restore session ── */
+  async function init() {
+    // Handle email confirmation redirect (hash fragment)
+    const hash = window.location.hash;
+    if (hash && hash.includes('access_token')) {
+      const params = new URLSearchParams(hash.slice(1));
+      const access_token  = params.get('access_token');
+      const refresh_token = params.get('refresh_token');
+      const type          = params.get('type');
+
+      if (access_token) {
+        saveSession({ access_token, refresh_token });
+        // clean URL
+        history.replaceState(null, '', window.location.pathname);
+
+        if (type === 'signup') {
+          showAlert('success', '🎉 E-posta doğrulandı! Hoş geldiniz.');
+        }
+        showApp();
+        return;
+      }
+    }
+
+    // Restore saved session
+    const saved = localStorage.getItem('sb_session');
+    if (saved) {
+      try {
+        const s = JSON.parse(saved);
+        // check expiry via JWT payload
+        const payload = JSON.parse(atob(s.access_token.split('.')[1]));
+        if (payload.exp * 1000 > Date.now()) {
+          session = s;
+          showApp();
+          return;
+        } else if (s.refresh_token) {
+          const ok = await refreshSession(s.refresh_token);
+          if (ok) { showApp(); return; }
+        }
+      } catch {}
+    }
+
+    showAuth();
+  }
+
+  /* ── UI SWITCH ── */
+  function showAuth() {
+    document.getElementById('authWrap').style.display = 'block';
+    document.getElementById('appWrap').style.display  = 'none';
+    document.body.style.alignItems = 'flex-start';
+    document.body.style.paddingTop = '40px';
+  }
+
+  function showApp() {
+    document.getElementById('authWrap').style.display = 'none';
+    document.getElementById('appWrap').classList.add('show');
+    document.body.style.alignItems = 'flex-start';
+    document.body.style.paddingTop = '40px';
+
+    try {
+      const payload = JSON.parse(atob(session.access_token.split('.')[1]));
+      document.getElementById('userEmail').textContent = payload.email || '';
+    } catch {}
+
+    loadTodos();
+  }
+
+  /* ── TAB SWITCH ── */
+  function switchTab(tab) {
+    hideAlert();
+    document.getElementById('tabLogin').classList.toggle('active',  tab === 'login');
+    document.getElementById('tabSignup').classList.toggle('active', tab === 'signup');
+    document.getElementById('loginForm').classList.toggle('hidden',  tab !== 'login');
+    document.getElementById('signupForm').classList.toggle('hidden', tab !== 'signup');
+  }
+
+  /* ── ALERT ── */
+  function showAlert(type, msg) {
+    const box = document.getElementById('alertBox');
+    box.className = `auth-alert ${type} show`;
+    box.textContent = msg;
+  }
+
+  function hideAlert() {
+    document.getElementById('alertBox').className = 'auth-alert';
+  }
+
+  /* ── AUTH HANDLERS ── */
+  async function handleLogin(e) {
+    e.preventDefault();
+    hideAlert();
+    const btn   = document.getElementById('loginBtn');
+    const email = document.getElementById('loginEmail').value.trim();
+    const pass  = document.getElementById('loginPass').value;
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spin"></span> Giriş yapılıyor...';
+
+    try {
+      const data = await authFetch('/token?grant_type=password', {
+        method: 'POST',
+        body: JSON.stringify({ email, password: pass })
+      });
+
+      if (!data.access_token) throw new Error('Giriş başarısız.');
+      saveSession(data);
+      showApp();
+    } catch (err) {
+      let msg = err.message;
+      if (msg.includes('Email not confirmed')) msg = 'E-posta adresiniz henüz doğrulanmamış. Lütfen gelen kutunuzu kontrol edin.';
+      if (msg.includes('Invalid login'))       msg = 'E-posta veya şifre hatalı.';
+      showAlert('error', msg);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Giriş Yap';
     }
   }
 
+  async function handleSignup(e) {
+    e.preventDefault();
+    hideAlert();
+    const btn   = document.getElementById('signupBtn');
+    const email = document.getElementById('signupEmail').value.trim();
+    const pass  = document.getElementById('signupPass').value;
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spin"></span> Kayıt yapılıyor...';
+
+    try {
+      await authFetch('/signup', {
+        method: 'POST',
+        body: JSON.stringify({ email, password: pass })
+      });
+
+      // Show success card
+      document.getElementById('loginForm').classList.add('hidden');
+      document.getElementById('signupForm').classList.add('hidden');
+      document.querySelector('.auth-tabs').style.display = 'none';
+      document.getElementById('successScreen').style.display = 'block';
+      document.getElementById('sentEmail').textContent = email;
+    } catch (err) {
+      let msg = err.message;
+      if (msg.includes('already registered') || msg.includes('already been registered')) {
+        msg = 'Bu e-posta adresi zaten kayıtlı. Lütfen giriş yapın.';
+      }
+      showAlert('error', msg);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Hesap Oluştur';
+    }
+  }
+
+  async function handleLogout() {
+    try { await authFetch('/logout', { method: 'POST' }); } catch {}
+    saveSession(null);
+    todos = [];
+    document.getElementById('appWrap').classList.remove('show');
+    document.getElementById('successScreen').style.display = 'none';
+    document.querySelector('.auth-tabs').style.display = '';
+    switchTab('login');
+    document.getElementById('loginForm').reset();
+    document.getElementById('signupForm').reset();
+    showAuth();
+  }
+
+  /* ── TODOS API ── */
+  async function loadTodos() {
+    try {
+      todos = await todosFetch('?order=created_at.desc');
+      render();
+    } catch (e) { showError('Yüklenemedi: ' + e.message); }
+  }
+
   async function addTodo() {
-    const text = document.getElementById('newTodo').value.trim();
+    const input = document.getElementById('newTodo');
+    const text  = input.value.trim();
     if (!text) return;
     const btn = document.getElementById('addBtn');
     btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span>';
+    btn.innerHTML = '<span class="spin"></span>';
     try {
-      const [created] = await api('', {
+      const [created] = await todosFetch('', {
         method: 'POST',
-        body: JSON.stringify({ text, done: false })
+        body: JSON.stringify({ text, done: false, user_id: getUserId() })
       });
       todos.unshift(created);
-      document.getElementById('newTodo').value = '';
+      input.value = '';
       render();
-    } catch (e) {
-      showError('Eklenemedi: ' + e.message);
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = '+';
-    }
+    } catch (e) { showError('Eklenemedi: ' + e.message); }
+    finally { btn.disabled = false; btn.innerHTML = '+'; }
   }
 
   async function toggleTodo(id) {
     const t = todos.find(t => t.id === id);
     if (!t) return;
-    const prev = t.done;
-    t.done = !t.done;
-    render();
+    t.done = !t.done; render();
     try {
-      await api(`?id=eq.${id}`, {
-        method: 'PATCH',
-        body: JSON.stringify({ done: t.done })
-      });
-    } catch (e) {
-      t.done = prev;
-      render();
-      showError('Güncellenemedi: ' + e.message);
-    }
+      await todosFetch(`?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify({ done: t.done }) });
+    } catch (e) { t.done = !t.done; render(); showError(e.message); }
   }
 
   async function deleteTodo(id) {
     const prev = [...todos];
-    todos = todos.filter(t => t.id !== id);
-    render();
-    try {
-      await api(`?id=eq.${id}`, { method: 'DELETE' });
-    } catch (e) {
-      todos = prev;
-      render();
-      showError('Silinemedi: ' + e.message);
-    }
+    todos = todos.filter(t => t.id !== id); render();
+    try { await todosFetch(`?id=eq.${id}`, { method: 'DELETE' }); }
+    catch (e) { todos = prev; render(); showError(e.message); }
   }
 
   async function updateText(id, text) {
     const t = todos.find(t => t.id === id);
     if (!t || !text) return;
-    const prev = t.text;
-    t.text = text;
-    try {
-      await api(`?id=eq.${id}`, {
-        method: 'PATCH',
-        body: JSON.stringify({ text })
-      });
-    } catch (e) {
-      t.text = prev;
-      render();
-      showError('Düzenlenemedi: ' + e.message);
-    }
+    const prev = t.text; t.text = text;
+    try { await todosFetch(`?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify({ text }) }); }
+    catch (e) { t.text = prev; render(); showError(e.message); }
   }
 
   async function clearDone() {
-    const doneIds = todos.filter(t => t.done).map(t => t.id);
-    if (!doneIds.length) return;
+    const ids = todos.filter(t => t.done).map(t => t.id);
+    if (!ids.length) return;
     const prev = [...todos];
-    todos = todos.filter(t => !t.done);
-    render();
-    try {
-      await api(`?id=in.(${doneIds.join(',')})`, { method: 'DELETE' });
-    } catch (e) {
-      todos = prev;
-      render();
-      showError('Silinemedi: ' + e.message);
-    }
+    todos = todos.filter(t => !t.done); render();
+    try { await todosFetch(`?id=in.(${ids.join(',')})`, { method: 'DELETE' }); }
+    catch (e) { todos = prev; render(); showError(e.message); }
+  }
+
+  /* ── HELPERS ── */
+  function getUserId() {
+    try { return JSON.parse(atob(session.access_token.split('.')[1])).sub; } catch { return null; }
   }
 
   function filteredTodos() {
@@ -358,19 +771,30 @@
     return todos;
   }
 
-  function render() {
-    const shown      = filteredTodos();
-    const total      = todos.length;
-    const doneCount  = todos.filter(t => t.done).length;
-    const activeCount = total - doneCount;
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
 
-    document.getElementById('stats').textContent = `${total} görev · ${doneCount} tamamlandı`;
-    document.getElementById('remaining').textContent = `${activeCount} görev kaldı`;
+  function showError(msg) {
+    const bar = document.getElementById('errorBar');
+    bar.textContent = msg; bar.style.display = 'block';
+    clearTimeout(bar._t);
+    bar._t = setTimeout(() => bar.style.display = 'none', 4000);
+  }
+
+  /* ── RENDER ── */
+  function render() {
+    const shown  = filteredTodos();
+    const done   = todos.filter(t => t.done).length;
+    const active = todos.length - done;
+
+    document.getElementById('stats').textContent     = `${todos.length} görev · ${done} tamamlandı`;
+    document.getElementById('remaining').textContent = `${active} görev kaldı`;
 
     const list = document.getElementById('todoList');
 
     if (shown.length === 0) {
-      list.innerHTML = `<div class="empty">Görev yok</div>`;
+      list.innerHTML = `<div class="empty">${filter === 'done' ? 'Tamamlanan görev yok' : filter === 'active' ? 'Aktif görev yok' : 'Henüz görev yok'}</div>`;
       return;
     }
 
@@ -379,49 +803,30 @@
         <div class="todo-check" data-action="toggle"></div>
         <span class="todo-text" data-action="text">${escHtml(t.text)}</span>
         <div class="todo-actions">
-          <button class="btn-icon btn-edit"   data-action="edit"   title="Düzenle">✏️</button>
-          <button class="btn-icon btn-delete" data-action="delete" title="Sil">🗑️</button>
+          <button class="btn-icon edit" data-action="edit"   title="Düzenle">✏️</button>
+          <button class="btn-icon del"  data-action="delete" title="Sil">🗑️</button>
         </div>
-      </li>
-    `).join('');
+      </li>`).join('');
   }
 
-  function escHtml(str) {
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
-
-  function showError(msg) {
-    const bar = document.getElementById('errorBar');
-    bar.textContent = msg;
-    bar.style.display = 'block';
-    setTimeout(() => bar.style.display = 'none', 4000);
-  }
-
+  /* ── EDIT ── */
   function startEdit(id, el) {
-    editingId = id;
-    el.contentEditable = true;
-    el.focus();
-    const range = document.createRange();
-    range.selectNodeContents(el);
-    range.collapse(false);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
+    editingId = id; el.contentEditable = true; el.focus();
+    const r = document.createRange(); r.selectNodeContents(el); r.collapse(false);
+    window.getSelection().removeAllRanges(); window.getSelection().addRange(r);
   }
 
   function commitEdit(id, el) {
     const text = el.textContent.trim();
-    el.contentEditable = false;
-    editingId = null;
-    if (text) updateText(id, text);
-    else render();
+    el.contentEditable = false; editingId = null;
+    if (text) updateText(id, text); else render();
   }
 
-  // Event delegation
+  /* ── EVENT DELEGATION ── */
   document.getElementById('todoList').addEventListener('click', e => {
-    const item = e.target.closest('.todo-item');
-    if (!item) return;
+    const item = e.target.closest('.todo-item'); if (!item) return;
     const id     = Number(item.dataset.id);
-    const action = (e.target.closest('[data-action]') || {}).dataset?.action;
+    const action = e.target.closest('[data-action]')?.dataset.action;
     if (action === 'toggle') toggleTodo(id);
     else if (action === 'delete') deleteTodo(id);
     else if (action === 'edit') startEdit(id, item.querySelector('.todo-text'));
@@ -429,24 +834,14 @@
 
   document.getElementById('todoList').addEventListener('keydown', e => {
     if (editingId === null) return;
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      commitEdit(editingId, e.target);
-    }
-    if (e.key === 'Escape') {
-      editingId = null;
-      e.target.contentEditable = false;
-      render();
-    }
+    if (e.key === 'Enter')  { e.preventDefault(); commitEdit(editingId, e.target); }
+    if (e.key === 'Escape') { editingId = null; e.target.contentEditable = false; render(); }
   });
 
   document.getElementById('todoList').addEventListener('blur', e => {
-    if (editingId !== null && e.target.dataset.action === 'text') {
-      commitEdit(editingId, e.target);
-    }
+    if (editingId !== null && e.target.dataset.action === 'text') commitEdit(editingId, e.target);
   }, true);
 
-  document.getElementById('addBtn').addEventListener('click', addTodo);
   document.getElementById('newTodo').addEventListener('keydown', e => {
     if (e.key === 'Enter') addTodo();
   });
@@ -454,15 +849,12 @@
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      filter = btn.dataset.filter;
-      render();
+      btn.classList.add('active'); filter = btn.dataset.filter; render();
     });
   });
 
-  document.getElementById('clearDone').addEventListener('click', clearDone);
-
-  loadTodos();
+  /* ── START ── */
+  init();
 </script>
 </body>
 </html>
